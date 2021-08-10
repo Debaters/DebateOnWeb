@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Learn React Hello Start Side Project With React.js
         </a>
       </header>
     </div>
