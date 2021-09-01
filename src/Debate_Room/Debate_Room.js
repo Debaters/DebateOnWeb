@@ -1,6 +1,7 @@
 import React from 'react';
 import SingleReply from './SingleReply';
 import BrowerCheck from './BrowserCheck';
+import Debate_Subject from './Debate_Subject';
 
 class Debate_Room extends React.Component{
     constructor(props){
@@ -33,12 +34,14 @@ class Debate_Room extends React.Component{
             date : new Date().toISOString().slice(0, 10),
             content : value
         }]})
+        this.remove_text();
     }
 
     render(){
         return (
             <div id="root">
                 <div>
+                    <Debate_Subject />
                     <div id="replys">
                         {
                             this.state.replys.map(replys => {
@@ -55,8 +58,9 @@ class Debate_Room extends React.Component{
         )
     }
 
-    remove_text(element){
-        element.value = ' ';
+    remove_text(){
+        var clear_area = document.getElementById('new-reply-content');
+        clear_area.value = ' ';
     }
 }
 
