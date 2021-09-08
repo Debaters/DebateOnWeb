@@ -6,21 +6,24 @@ import axios from 'axios';
 
 const Debate_Subject = ()=>{
     useEffect( () => {
-            axios.get('/graphql', {
-            body: `{"query":"{titles}"}`,
-            headers: {
-            Accept: "application/json",
-            "Api-Key": "demoKeyOfApi",
-            "Content-Type": "application/json",
+            axios.post("/graphql", 
+                       {
+                           "query": "{titles}"
+                       },
+                       {
+                           headers: {
+                           "Accept": "application/json",
+                           "Api-Key": "demoKeyOfApi",
+                           "Content-Type": "application/json"
+                       }
             }
-        }).then( response => console.log ( response.data )
+        ).then( response => console.log ( response.data )
       ); 
     }, [])
 
     return (
         <div>
             LandingPage
-
         </div>
     );
 }
