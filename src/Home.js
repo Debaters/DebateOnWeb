@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
-const Home = () => {
+const Home = ({ props }) => {
   const [data, setData] = useState("");
+  let history = useHistory();
+
   const getData = async () => {
     const response = await fetch("/graphql", {
-      body: `{"query":"{homeDebates{title creatorName}}"}`,
+      body: `{"query":"{homeDebates(offset:5,size:5){title creatorName}}"}`,
       headers: {
         Accept: "application/json",
         "Api-Key": "demoKeyOfApi",
@@ -21,15 +25,15 @@ const Home = () => {
   }, []);
 
   const onClickList = () => {
-    console.log("handling");
+    history.push("/routing");
   };
   return (
     <Frame>
       {data &&
-        data.map((debates, index) => (
+        data.map((debaterRoom, index) => (
           <Card key={index} onClick={onClickList}>
-            <h3>{debates.title}</h3>
-            <p>{debates.creatorName}</p>
+            <h3>{debaterRoom.title}</h3>
+            <p>{debaterRoom.creatorName}</p>
           </Card>
         ))}
     </Frame>
