@@ -2,6 +2,7 @@ import React from 'react';
 import SingleReply from './SingleReply';
 import BrowerCheck from './BrowserCheck';
 import Debate_Subject from './Debate_Subject';
+import Debate_title from './Debate_title';
 
 class Debate_Room extends React.Component{
     constructor(props){
@@ -41,6 +42,7 @@ class Debate_Room extends React.Component{
         return (
             <div id="root">
                 <div>
+                    <Debate_title />
                     <Debate_Subject />
                     <div id="replys">
                         {

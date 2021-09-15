@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import axios from 'axios';
 
-const Debate_Subject = ()=>{
+const Debate_title = ()=>{
     const [data, setData] = useState(null);
 
     
@@ -11,7 +11,8 @@ const Debate_Subject = ()=>{
                 data: {data}
             } = await axios.post("/graphql",
                         {
-                            query: `{debate(id:"1"){description creatorName}}`
+                            // id 부분 변수로 변경 필요 $id! 쓰면 되는걸로 알고있음
+                            query: `{debate(id:"1"){title}}`
                         },
                         {
                             headers: {
@@ -33,8 +34,7 @@ const Debate_Subject = ()=>{
             <div>
                 {data && 
                     <div>
-                        creator : {data.creatorName} <br/>
-                        subject : {data.description}
+                        <h1>{data.title}</h1>
                     </div>
                 }
             </div>
@@ -42,4 +42,4 @@ const Debate_Subject = ()=>{
     );
 }
 
-export default Debate_Subject;
+export default Debate_title;
