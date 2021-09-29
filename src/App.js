@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Home from "./Home";
+import "./App.css";
 function App() {
+  //삭제 예정(RoutingTest)
+  const RoutingTest = () => {
+    return <h2>some components made by casy!</h2>;
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <Router>
+      <header className='header'>
+        <div>
+          <Link exact='true' to='/DebateOnWeb'>
+            Debaters world
+          </Link>
+        </div>
       </header>
-    </div>
+      <div className='main'>
+        <Switch>
+          <Route exact path='/DebateOnWeb'>
+            <Home />
+          </Route>
+          <Route exact path='/routing'>
+            <RoutingTest />
+          </Route>
+        </Switch>
+      </div>
+      <footer className='footer'></footer>
+    </Router>
   );
 }
 
