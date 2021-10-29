@@ -8,18 +8,23 @@ const Home = ({ props }) => {
   let history = useHistory();
 
   const getData = async () => {
-    const response = await fetch("/graphql", {
-      body: `{"query":"{homeDebates(offset:5,size:5){title creatorName}}"}`,
-      headers: {
-        Accept: "application/json",
-        "Api-Key": "demoKeyOfApi",
-        "Content-Type": "application/json",
+    const { data: response } = await axios.post(
+      "/graphql",
+      {
+        query: `query gethomeDebates {
+      homeDebates(offset:1, size:5){title creatorName}
+    }`,
       },
-      method: "POST",
-    }).then((response) => response.json());
+      {
+        headers: {
+          Accept: "application/json",
+          "Api-Key": "demoKeyOfApi",
+          "Content-Type": "application/json",
+        },
+      }
+    );
     setData(response.data.homeDebates);
   };
-
   useEffect(() => {
     getData();
   }, []);
@@ -27,8 +32,38 @@ const Home = ({ props }) => {
   const onClickList = () => {
     history.push("/routing");
   };
+
+  const onClickCreateRoom = async () => {
+    await axios
+      .post(
+        "/graphql",
+        {
+          query: `mutation createDebate($title:String!, $description:String!, $creatorName:String!) {
+          createDebate(title:$title, description:$description, creatorName:$creatorName)
+        }`,
+          variables: {
+            title: "제목이라우",
+            description: "설명해보라우",
+            creatorName: "아이디라우",
+          },
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Api-Key": "demoKeyOfApi",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(() => getData());
+  };
   return (
     <Frame>
+      <ButtonWrapper>
+        <AddDebateRoomButton onClick={onClickCreateRoom}>
+          추가하기
+        </AddDebateRoomButton>
+      </ButtonWrapper>
       {data &&
         data.map((debaterRoom, index) => (
           <Card key={index} onClick={onClickList}>
@@ -57,5 +92,12 @@ const Card = styled.div`
   padding: 10px;
   cursor: pointer;
 `;
-
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 50px;
+  margin: 5px;
+`;
+const AddDebateRoomButton = styled.button``;
 export default Home;
