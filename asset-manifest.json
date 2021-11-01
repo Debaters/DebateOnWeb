@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.eb083665.chunk.css",
-    "main.js": "/static/js/main.c098f03b.chunk.js",
-    "main.js.map": "/static/js/main.c098f03b.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.8843874e.js",
-    "runtime-main.js.map": "/static/js/runtime-main.8843874e.js.map",
-    "static/js/2.0b330fb3.chunk.js": "/static/js/2.0b330fb3.chunk.js",
-    "static/js/2.0b330fb3.chunk.js.map": "/static/js/2.0b330fb3.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/main.eb083665.chunk.css.map": "/static/css/main.eb083665.chunk.css.map",
-    "static/js/2.0b330fb3.chunk.js.LICENSE.txt": "/static/js/2.0b330fb3.chunk.js.LICENSE.txt"
+    "main.css": "/DebateOnWeb/static/css/main.eb083665.chunk.css",
+    "main.js": "/DebateOnWeb/static/js/main.c098f03b.chunk.js",
+    "main.js.map": "/DebateOnWeb/static/js/main.c098f03b.chunk.js.map",
+    "runtime-main.js": "/DebateOnWeb/static/js/runtime-main.72de370d.js",
+    "runtime-main.js.map": "/DebateOnWeb/static/js/runtime-main.72de370d.js.map",
+    "static/js/2.0b330fb3.chunk.js": "/DebateOnWeb/static/js/2.0b330fb3.chunk.js",
+    "static/js/2.0b330fb3.chunk.js.map": "/DebateOnWeb/static/js/2.0b330fb3.chunk.js.map",
+    "index.html": "/DebateOnWeb/index.html",
+    "static/css/main.eb083665.chunk.css.map": "/DebateOnWeb/static/css/main.eb083665.chunk.css.map",
+    "static/js/2.0b330fb3.chunk.js.LICENSE.txt": "/DebateOnWeb/static/js/2.0b330fb3.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.8843874e.js",
+    "static/js/runtime-main.72de370d.js",
     "static/js/2.0b330fb3.chunk.js",
     "static/css/main.eb083665.chunk.css",
     "static/js/main.c098f03b.chunk.js"
