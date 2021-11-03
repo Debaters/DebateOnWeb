@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/DebateOnWeb/static/css/main.eb083665.chunk.css",
-    "main.js": "/DebateOnWeb/static/js/main.0be4fc6d.chunk.js",
-    "main.js.map": "/DebateOnWeb/static/js/main.0be4fc6d.chunk.js.map",
+    "main.js": "/DebateOnWeb/static/js/main.30016009.chunk.js",
+    "main.js.map": "/DebateOnWeb/static/js/main.30016009.chunk.js.map",
     "runtime-main.js": "/DebateOnWeb/static/js/runtime-main.72de370d.js",
     "runtime-main.js.map": "/DebateOnWeb/static/js/runtime-main.72de370d.js.map",
     "static/js/2.9f67102f.chunk.js": "/DebateOnWeb/static/js/2.9f67102f.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.72de370d.js",
     "static/js/2.9f67102f.chunk.js",
     "static/css/main.eb083665.chunk.css",
-    "static/js/main.0be4fc6d.chunk.js"
+    "static/js/main.30016009.chunk.js"
   ]
 }
