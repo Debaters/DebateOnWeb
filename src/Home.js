@@ -9,7 +9,7 @@ const Home = ({ props }) => {
 
   const getData = async () => {
     const response = await fetch("/graphql", {
-      body: `{"query":"{homeDebates(offset:5,size:5){title creatorName}}"}`,
+      body: `{"query":"{homeDebates(offset:0,size:6){title creatorName id}}"}`,
       headers: {
         Accept: "application/json",
         "Api-Key": "demoKeyOfApi",
