@@ -1,30 +1,19 @@
 import React from 'react';
 import SingleReply from './SingleReply';
-import BrowerCheck from './BrowserCheck';
+import BrowserCheck from './BrowserCheck';
 import Debate_Subject from './Debate_Subject';
 import Debate_title from './Debate_title';
 import axios from "axios";
-
-// const data = {
-//     input_content : 'input_content',
-//     input_writer : 'input_writer'
-// }
+import BrowerCheck from './BrowserCheck';
 
 class Debate_Room extends React.Component{
     
     constructor(props){
         super(props);
         this.state = {
-            // replys : [
-            //     {
-            //         id : 1,
-            //         writer : "test",
-            //         content : "리액트 처음입니다."
-            //     }
-            // ]
             replys : [],
-            input_content : '',
-            input_writer : ''
+            content:'',
+            writerName:''
         }
         
         this.addReply = this.addReply.bind(this);
@@ -54,25 +43,25 @@ class Debate_Room extends React.Component{
    }
 
    addComment = async() => {
-       // cors issue로 인해 작동 X
-        axios.post("http://debaters.world:8080/graphql",
+        axios.post("/graphql",
                     {
                         query: 
-                            `mutation{
+                            `mutation addComment($debateId:String!, $content:String!, $writerName:String!){
                                 addComment(
-                                    debateId:"id",
+                                    debateId:$debateId,
                                     comment:{
-                                        content:${this.state.input_content},
-                                        writerName:${this.state.input_writer}
+                                        content:$content,
+                                        writerName:$writerName
                                     }
                                 )
-                            }`
-                    },
-                    {
-                        variables: {
-                            input_content : this.state.input_content,
-                            input_writer : this.state.input_writer
-                        }                       
+                            }`,
+                        
+                            variables: {
+                                debateId : "id",
+                                content : this.state.content,
+                                writerName : this.state.writerName
+                            } 
+                                    
                     },
                     {
                         headers: {
@@ -86,17 +75,14 @@ class Debate_Room extends React.Component{
 
     addReply(){
         let value = document.querySelector('#new-reply-content').value;
-        // this.setState({replys: [...this.state.replys, {
-        //     id : this.state.replys.length + 1,
-        //     writer: <BrowerCheck />,
-        //     content : value
-        // }]})
-        this.setState({
-            input_writer : <BrowerCheck />,
-            input_content : value
-        })
-        console.log(this.state.input_content, this.state.input_writer);
-        this.addComment();
+        this.setState({replys: [...this.state.replys, {
+            // id : this.state.replys.length + 1, 추후 ID값 추가되면 넣을자리
+            writerName : BrowerCheck(),
+            content : value
+        }],
+        content : value,
+        writerName : BrowerCheck()
+        }, () => { this.addComment(); console.log(this.state.writerName, this.state.content); })
         this.remove_text();
     }
 
