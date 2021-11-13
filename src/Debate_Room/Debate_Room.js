@@ -3,42 +3,107 @@ import SingleReply from './SingleReply';
 import BrowerCheck from './BrowserCheck';
 import Debate_Subject from './Debate_Subject';
 import Debate_title from './Debate_title';
+import axios from "axios";
+
+// const data = {
+//     input_content : 'input_content',
+//     input_writer : 'input_writer'
+// }
 
 class Debate_Room extends React.Component{
+    
     constructor(props){
         super(props);
         this.state = {
-            replys : [
-                {
-                    id : 1,
-                    writer : "test",
-                    date : "2020-10-10",
-                    content : "리액트 처음입니다."
-                },
-                {
-                    id : 2,
-                    writer : "test2",
-                    date : "2021-08-19",
-                    content : "리액트 처음이라고"
-                }
-            ]
+            // replys : [
+            //     {
+            //         id : 1,
+            //         writer : "test",
+            //         content : "리액트 처음입니다."
+            //     }
+            // ]
+            replys : [],
+            input_content : '',
+            input_writer : ''
         }
-        //지금 당장은 바로 내용이 갱신되도록 한다. 추후 DB에 값을 저장하면서 갱신을 동시에 하도록 하면 될듯.
+        
         this.addReply = this.addReply.bind(this);
     }
+    
+    loadComment = async() => {
+        axios.post("/graphql",
+                       {
+                           query: `{debate(id:"id"){comments{content writerName}}}`
+                       },
+                       {
+                           headers: {
+                           "Accept": "application/json",
+                           "Api-Key": "demoKeyOfApi",
+                           "Content-Type": "application/json"
+                           }
+                       }
+       ).then(({ data }) => {
+           this.setState({
+               replys: data.data.debate.comments
+           })
+       });
+   };
+
+   componentDidMount(){
+       this.loadComment();
+   }
+
+   addComment = async() => {
+       // cors issue로 인해 작동 X
+        axios.post("http://debaters.world:8080/graphql",
+                    {
+                        query: 
+                            `mutation{
+                                addComment(
+                                    debateId:"id",
+                                    comment:{
+                                        content:${this.state.input_content},
+                                        writerName:${this.state.input_writer}
+                                    }
+                                )
+                            }`
+                    },
+                    {
+                        variables: {
+                            input_content : this.state.input_content,
+                            input_writer : this.state.input_writer
+                        }                       
+                    },
+                    {
+                        headers: {
+                        "Accept": "application/json",
+                        "Api-Key": "demoKeyOfApi",
+                        "Content-Type": "application/json"
+                        }
+                    }
+        )
+   }
 
     addReply(){
         let value = document.querySelector('#new-reply-content').value;
-        this.setState({replys: [...this.state.replys, {
-            id : this.state.replys.length + 1,
-            writer: <BrowerCheck />,
-            date : new Date().toISOString().slice(0, 10),
-            content : value
-        }]})
+        // this.setState({replys: [...this.state.replys, {
+        //     id : this.state.replys.length + 1,
+        //     writer: <BrowerCheck />,
+        //     content : value
+        // }]})
+        this.setState({
+            input_writer : <BrowerCheck />,
+            input_content : value
+        })
+        console.log(this.state.input_content, this.state.input_writer);
+        this.addComment();
         this.remove_text();
     }
 
     render(){
+        const { replys } = this.state;
+        console.log(replys);
+
         return (
             <div id="root">
                 <div>
@@ -64,6 +129,7 @@ class Debate_Room extends React.Component{
         var clear_area = document.getElementById('new-reply-content');
         clear_area.value = ' ';
     }
+    
 }
 
 export default Debate_Room;
