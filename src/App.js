@@ -10,12 +10,14 @@ function App() {
     <Router>
       <header className='header'>
         <div>
-          <Link to='/'>Debaters world</Link>
+          <Link exact='true' to='/DebateOnWeb'>
+            Debaters world
+          </Link>
         </div>
       </header>
       <div className='main'>
         <Switch>
-          <Route exact path='/'>
+          <Route exact path='/DebateOnWeb'>
             <Home />
           </Route>
           <Route exact path='/routing'>
