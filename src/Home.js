@@ -3,8 +3,11 @@ import styled from "@emotion/styled";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
+import ModalCreateRoom from "./Home/ModalCreateRoom";
+
 const Home = ({ props }) => {
   const [data, setData] = useState("");
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   let history = useHistory();
 
   const getData = async () => {
@@ -32,36 +35,21 @@ const Home = ({ props }) => {
   const onClickList = () => {
     history.push("/routing");
   };
-
-  const onClickCreateRoom = async () => {
-    await axios
-      .post(
-        "/graphql",
-        {
-          query: `mutation createDebate($title:String!, $description:String!, $creatorName:String!) {
-          createDebate(title:$title, description:$description, creatorName:$creatorName)
-        }`,
-          variables: {
-            title: "제목이라우",
-            description: "설명해보라우",
-            creatorName: "아이디라우",
-          },
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            "Api-Key": "demoKeyOfApi",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then(() => getData());
+  const onClickModal = () => {
+    console.log("모달 열기");
+    setModalIsOpen(true);
   };
+
+  const onCloseModal = () => {
+    console.log("모달 닫기");
+    setModalIsOpen(false);
+  };
+
   return (
     <Frame>
       <ButtonWrapper>
-        <AddDebateRoomButton onClick={onClickCreateRoom}>
-          추가하기
+        <AddDebateRoomButton onClick={onClickModal}>
+          방만들기
         </AddDebateRoomButton>
       </ButtonWrapper>
       {data &&
@@ -71,6 +59,12 @@ const Home = ({ props }) => {
             <p>{debaterRoom.creatorName}</p>
           </Card>
         ))}
+      <ModalCreateRoom
+        isOpen={modalIsOpen}
+        onCloseEvent={onCloseModal}
+        getData={getData}
+        setModalIsOpen={setModalIsOpen}
+      />
     </Frame>
   );
 };
