@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Home from "./Home";
 import "./App.css";
@@ -20,8 +20,7 @@ function App() {
           <Route exact path='/DebateOnWeb'>
             <Home />
           </Route>
-          <Route exact path='/routing'>
-            <Debate_Room />
+          <Route exact path='/routing' component={Debate_Room}>
           </Route>
         </Switch>
       </div>
