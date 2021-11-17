@@ -15,7 +15,7 @@ const Home = ({ props }) => {
       "/graphql",
       {
         query: `query gethomeDebates {
-      homeDebates(offset:1, size:5){title creatorName}
+      homeDebates(offset:1, size:5){id title creatorName}
     }`,
       },
       {
@@ -32,16 +32,14 @@ const Home = ({ props }) => {
     getData();
   }, []);
 
-  const onClickList = () => {
-    history.push("/routing");
+  const onClickList = (id) => {
+    history.push({ pathname: "/routing", state: { debaterId: id } });
   };
   const onClickModal = () => {
-    console.log("모달 열기");
     setModalIsOpen(true);
   };
 
   const onCloseModal = () => {
-    console.log("모달 닫기");
     setModalIsOpen(false);
   };
 
@@ -54,7 +52,10 @@ const Home = ({ props }) => {
       </ButtonWrapper>
       {data &&
         data.map((debaterRoom, index) => (
-          <Card key={index} onClick={onClickList}>
+          <Card
+            key={debaterRoom.id}
+            onClick={() => onClickList(debaterRoom.id)}
+          >
             <h3>{debaterRoom.title}</h3>
             <p>{debaterRoom.creatorName}</p>
           </Card>

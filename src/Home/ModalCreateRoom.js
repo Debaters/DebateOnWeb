@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 
 const ModalCreateRoom = ({ isOpen, onCloseEvent, getData, setModalIsOpen }) => {
   const [data, setData] = useState({ title: "", description: "" });
-  // 아래 input value으로 넣어주기 위해
   const { title, description } = data;
-  // console.log(isOpen);
   function handleValue(e) {
     const { name, value } = e.target;
-    console.log(e.target);
     setData({
       ...data,
       [name]: value,
     });
   }
   const onClickCreateRoom = async (title, description) => {
-    console.log("클릭 누름");
     await axios
       .post(
         "/graphql",
@@ -43,13 +38,24 @@ const ModalCreateRoom = ({ isOpen, onCloseEvent, getData, setModalIsOpen }) => {
       .then(() => getData());
   };
 
+  function onMouseUpOffModal(e) {
+    if (e.target.className === "css-1gkwgdl") {
+      setModalIsOpen(false);
+    } else {
+      return;
+    }
+  }
   return (
     <>
       {isOpen ? (
-        <ModalLayer onClick={() => setModalIsOpen(false)}>
+        <ModalLayer onClick={(e) => onMouseUpOffModal(e)}>
           <ModalContent>
-            <button onClick={onCloseEvent}>창 닫기</button>
-            <div>
+            <ModalHeader>
+              <CloseBtn onClick={onCloseEvent}>
+                <Circle />
+              </CloseBtn>
+            </ModalHeader>
+            <ModalSection>
               제목 :
               <input
                 type='text'
@@ -68,12 +74,14 @@ const ModalCreateRoom = ({ isOpen, onCloseEvent, getData, setModalIsOpen }) => {
                 onChange={handleValue}
                 required
               />
-              <button
+            </ModalSection>
+            <ModalFooter>
+              <CreateRoomBtn
                 onClick={() => onClickCreateRoom(data.title, data.description)}
               >
                 방 만들기
-              </button>
-            </div>
+              </CreateRoomBtn>
+            </ModalFooter>
           </ModalContent>
         </ModalLayer>
       ) : (
@@ -100,10 +108,50 @@ const ModalLayer = styled.div`
 `;
 
 const ModalContent = styled.div`
+  display: grid;
+  grid-template-rows: 50px 3fr 1fr;
   background-color: white;
-  width: 70%;
+  width: 50%;
   border: 1px solid gray;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+`;
+
+const CloseBtn = styled.button`
+  /* background-color: #3281f6; */
+  background-color: black;
+  height: 100%;
+  border: none;
+`;
+
+const ModalHeader = styled.header`
+  background-color: black;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const ModalSection = styled.section`
+  background-color: wheat;
+`;
+
+const ModalFooter = styled.footer`
+  background-color: red;
+  display: flex;
+  justify-content: center;
+`;
+
+const Circle = styled.div`
+  width: 50%;
+  height: 50%;
+  border-radius: 100%;
+  background-color: red;
+  text-align: center;
+`;
+
+const CreateRoomBtn = styled.button`
+  width: 100px;
+  height: 90%;
+  background-color: #3281f6;
+  border: none;
 `;
