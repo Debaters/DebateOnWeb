@@ -3,39 +3,69 @@ import styled from "@emotion/styled";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
+import ModalCreateRoom from "./Home/ModalCreateRoom";
+
 const Home = ({ props }) => {
   const [data, setData] = useState("");
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   let history = useHistory();
 
   const getData = async () => {
-    const response = await fetch("/graphql", {
-      body: `{"query":"{homeDebates(offset:0,size:6){title creatorName id}}"}`,
-      headers: {
-        Accept: "application/json",
-        "Api-Key": "demoKeyOfApi",
-        "Content-Type": "application/json",
+    const { data: response } = await axios.post(
+      "/graphql",
+      {
+        query: `query gethomeDebates {
+      homeDebates(offset:1, size:5){id title creatorName}
+    }`,
       },
-      method: "POST",
-    }).then((response) => response.json());
+      {
+        headers: {
+          Accept: "application/json",
+          "Api-Key": "demoKeyOfApi",
+          "Content-Type": "application/json",
+        },
+      }
+    );
     setData(response.data.homeDebates);
   };
-
   useEffect(() => {
     getData();
   }, []);
 
-  const onClickList = () => {
-    history.push("/routing");
+  const onClickList = (id) => {
+    history.push({ pathname: "/routing", state: { debaterId: id } });
   };
+  const onClickModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const onCloseModal = () => {
+    setModalIsOpen(false);
+  };
+
   return (
     <Frame>
+      <ButtonWrapper>
+        <AddDebateRoomButton onClick={onClickModal}>
+          방만들기
+        </AddDebateRoomButton>
+      </ButtonWrapper>
       {data &&
         data.map((debaterRoom, index) => (
-          <Card key={index} onClick={onClickList}>
+          <Card
+            key={debaterRoom.id}
+            onClick={() => onClickList(debaterRoom.id)}
+          >
             <h3>{debaterRoom.title}</h3>
             <p>{debaterRoom.creatorName}</p>
           </Card>
         ))}
+      <ModalCreateRoom
+        isOpen={modalIsOpen}
+        onCloseEvent={onCloseModal}
+        getData={getData}
+        setModalIsOpen={setModalIsOpen}
+      />
     </Frame>
   );
 };
@@ -57,5 +87,12 @@ const Card = styled.div`
   padding: 10px;
   cursor: pointer;
 `;
-
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 50px;
+  margin: 5px;
+`;
+const AddDebateRoomButton = styled.button``;
 export default Home;
