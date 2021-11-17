@@ -1,18 +1,26 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import axios from 'axios';
 
-const Debate_title = ()=>{
+const Debate_title = ( props )=>{
     const [data, setData] = useState(null);
 
     
     useEffect( () => {
-        const getData = async () =>{
+        const getData = async (id) =>{
             const {
                 data: {data}
             } = await axios.post("/graphql",
                         {
                             // id 부분 변수로 변경 필요 $id! 쓰면 되는걸로 알고있음
-                            query: `{debate(id:"1"){title}}`
+                            query: `
+                                query ($id:String!){
+                                        debate(id:$id){
+                                            title
+                                        }
+                                }`,
+                                variables: { 
+                                    id : id
+                                }
                         },
                         {
                             headers: {
@@ -25,7 +33,7 @@ const Debate_title = ()=>{
             setData(data.debate);
         }
 
-        getData();
+        getData(props.roomId);
     }, []);
 
     return (
