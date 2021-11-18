@@ -23,7 +23,6 @@ const Debate_title = ()=>{
                         }
             );
             setData(data.debate);
-            console.log(data.debate);
         }
 
         getData();

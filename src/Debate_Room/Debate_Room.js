@@ -1,44 +1,95 @@
 import React from 'react';
 import SingleReply from './SingleReply';
-import BrowerCheck from './BrowserCheck';
+import BrowserCheck from './BrowserCheck';
 import Debate_Subject from './Debate_Subject';
 import Debate_title from './Debate_title';
+import axios from "axios";
+import BrowerCheck from './BrowserCheck';
 
 class Debate_Room extends React.Component{
+    
     constructor(props){
         super(props);
         this.state = {
-            replys : [
-                {
-                    id : 1,
-                    writer : "test",
-                    date : "2020-10-10",
-                    content : "리액트 처음입니다."
-                },
-                {
-                    id : 2,
-                    writer : "test2",
-                    date : "2021-08-19",
-                    content : "리액트 처음이라고"
-                }
-            ]
+            replys : [],
+            content:'',
+            writerName:''
         }
-        //지금 당장은 바로 내용이 갱신되도록 한다. 추후 DB에 값을 저장하면서 갱신을 동시에 하도록 하면 될듯.
+        
         this.addReply = this.addReply.bind(this);
     }
+    
+    loadComment = async() => {
+        axios.post("/graphql",
+                       {
+                           query: `{debate(id:"id"){comments{content writerName}}}`
+                       },
+                       {
+                           headers: {
+                           "Accept": "application/json",
+                           "Api-Key": "demoKeyOfApi",
+                           "Content-Type": "application/json"
+                           }
+                       }
+       ).then(({ data }) => {
+           this.setState({
+               replys: data.data.debate.comments
+           })
+       });
+   };
+
+   componentDidMount(){
+       this.loadComment();
+   }
+
+   addComment = async() => {
+        axios.post("/graphql",
+                    {
+                        query: 
+                            `mutation addComment($debateId:String!, $content:String!, $writerName:String!){
+                                addComment(
+                                    debateId:$debateId,
+                                    comment:{
+                                        content:$content,
+                                        writerName:$writerName
+                                    }
+                                )
+                            }`,
+                        
+                            variables: {
+                                debateId : "id",
+                                content : this.state.content,
+                                writerName : this.state.writerName
+                            } 
+                                    
+                    },
+                    {
+                        headers: {
+                        "Accept": "application/json",
+                        "Api-Key": "demoKeyOfApi",
+                        "Content-Type": "application/json"
+                        }
+                    }
+        )
+   }
 
     addReply(){
         let value = document.querySelector('#new-reply-content').value;
         this.setState({replys: [...this.state.replys, {
-            id : this.state.replys.length + 1,
-            writer: <BrowerCheck />,
-            date : new Date().toISOString().slice(0, 10),
+            // id : this.state.replys.length + 1, 추후 ID값 추가되면 넣을자리
+            writerName : BrowerCheck(),
             content : value
-        }]})
+        }],
+        content : value,
+        writerName : BrowerCheck()
+        }, () => { this.addComment(); console.log(this.state.writerName, this.state.content); })
         this.remove_text();
     }
 
     render(){
+        const { replys } = this.state;
+        console.log(replys);
+
         return (
             <div id="root">
                 <div>
@@ -64,6 +115,7 @@ class Debate_Room extends React.Component{
         var clear_area = document.getElementById('new-reply-content');
         clear_area.value = ' ';
     }
+    
 }
 
 export default Debate_Room;

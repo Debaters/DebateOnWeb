@@ -1,5 +1,3 @@
-import React from 'react';
-
 function BrowerCheck(props) {
     var sBrowser, sUsrAg = navigator.userAgent;
 

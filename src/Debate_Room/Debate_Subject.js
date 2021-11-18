@@ -11,7 +11,7 @@ const Debate_Subject = ()=>{
                 data: {data}
             } = await axios.post("/graphql",
                         {
-                            query: `{debate(id:"1"){description creatorName}}`
+                            query: `{debate(id:"id"){description creatorName}}`
                         },
                         {
                             headers: {
