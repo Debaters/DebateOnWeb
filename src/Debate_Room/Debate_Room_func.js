@@ -10,8 +10,8 @@ import { getDefaultNormalizer } from '@testing-library/dom';
 
 const Debate_Room = () => {
     const [data, setData] = useState("");
-    const id = useLocation();
-    const id_data = id.state.debaterId;
+    const location = useLocation();
+    const id_data = location.state.debaterId;
     // console.log(id_data);
 
     const remove_text = () => {
@@ -89,7 +89,7 @@ const Debate_Room = () => {
     }
 
     return (
-        <div id="root">
+        <div id="Debate_Room">
             <div>
                 <Debate_title roomId={id_data} />
                 <Debate_Subject roomId={id_data} />

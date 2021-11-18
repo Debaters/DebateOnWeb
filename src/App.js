@@ -4,7 +4,6 @@ import Home from "./Home";
 import "./App.css";
 import "./Debate_Room/Debate_Room";
 import Debate_Room from "./Debate_Room/Debate_Room_func";
-import Tester from "./Debate_Room/test"
 
 function App() {
   return (
