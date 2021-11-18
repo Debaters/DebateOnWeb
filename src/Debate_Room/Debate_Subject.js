@@ -1,17 +1,25 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import axios from 'axios';
 
-const Debate_Subject = ()=>{
+const Debate_Subject = ( props )=>{
     const [data, setData] = useState(null);
-
-    
+           
     useEffect( () => {
-        const getData = async () =>{
+        const getData = async (id) =>{
             const {
                 data: {data}
             } = await axios.post("/graphql",
                         {
-                            query: `{debate(id:"id"){description creatorName}}`
+                            query: `
+                                query ($id:String!){
+                                    debate(id:$id){
+                                        description
+                                        creatorName
+                                    }
+                            }`,
+                            variables: { 
+                                id : id
+                            }
                         },
                         {
                             headers: {
@@ -25,7 +33,7 @@ const Debate_Subject = ()=>{
             console.log(data.debate);
         }
 
-        getData();
+        getData(props.roomId);
     }, []);
 
     return (
