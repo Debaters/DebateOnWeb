@@ -6,16 +6,16 @@ import axios from "axios";
 import ModalCreateRoom from "./Home/ModalCreateRoom";
 
 const Home = ({ props }) => {
-  const [data, setData] = useState("");
+  const [data, setData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [offset, setOffset] = useState(1);
   let history = useHistory();
-
   const getData = async () => {
     const { data: response } = await axios.post(
       "/graphql",
       {
         query: `query gethomeDebates {
-      homeDebates(offset:1, size:5){id title creatorName}
+      homeDebates(offset:0, size:5){id title creatorName}
     }`,
       },
       {
@@ -28,9 +28,55 @@ const Home = ({ props }) => {
     );
     setData(response.data.homeDebates);
   };
+
+  const fetchMoreData = async (offset) => {
+    await axios
+      .post(
+        "/graphql",
+        {
+          query: `query gethomeDebates {
+  homeDebates(offset:${offset}, size:5){id title creatorName}
+  }`,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Api-Key": "demoKeyOfApi",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((reponse) => {
+        const newData = reponse.data.data.homeDebates;
+        const mergeData = data.concat(newData);
+        setData(mergeData);
+      });
+  };
+
+  function checkScroll() {
+    const scrollHeight = mainScrollSection.scrollHeight;
+    const scrollTop = mainScrollSection.scrollTop;
+    const clientHeight = mainScrollSection.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight) {
+      // console.log("밑 바닥에 파닭", offset);
+      setOffset(offset + 1);
+      fetchMoreData(offset);
+    }
+  }
+
+  const mainScrollSection = document.querySelector(".main");
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    mainScrollSection &&
+      mainScrollSection.addEventListener("scroll", checkScroll);
+
+    return () => {
+      mainScrollSection &&
+        mainScrollSection.removeEventListener("scroll", checkScroll);
+    };
+  });
 
   const onClickList = (id) => {
     history.push({ pathname: "/routing", state: { debaterId: id } });
