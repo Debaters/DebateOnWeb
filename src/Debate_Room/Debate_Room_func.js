@@ -4,15 +4,13 @@ import BrowserCheck from './BrowserCheck';
 import Debate_Subject from './Debate_Subject';
 import Debate_title from './Debate_title';
 import axios from "axios";
-import BrowerCheck from './BrowserCheck';
 import { useLocation  } from "react-router-dom";
 import { getDefaultNormalizer } from '@testing-library/dom';
 
 const Debate_Room = () => {
-    const [data, setData] = useState("");
+    const [reply, setReply] = useState([]);
     const location = useLocation();
     const id_data = location.state.debaterId;
-    // console.log(id_data);
 
     const remove_text = () => {
         var clear_area = document.getElementById('new-reply-content');
@@ -20,7 +18,7 @@ const Debate_Room = () => {
     }
 
     useEffect(() => {
-        loadComment(id_data);
+        loadComment(id_data).then().catch();
     }, []);
 
     const loadComment = async(id) => {
@@ -47,7 +45,7 @@ const Debate_Room = () => {
                         }
                     }
         );
-    setData(response.data.debate.comments);
+    setReply(response.data.debate.comments);
     }
 
     const addComment = async(id, content, writerName) => {
@@ -83,9 +81,12 @@ const Debate_Room = () => {
 
    const addReply = () => {
         let value = document.querySelector('#new-reply-content').value;
-        addComment(id_data, value, BrowerCheck());
+        setReply([...reply, {
+            writerName : <BrowserCheck />,
+            content : value
+        }]);
+        addComment(id_data, value, BrowserCheck());
         remove_text();
-        
     }
 
     return (
@@ -95,13 +96,8 @@ const Debate_Room = () => {
                 <Debate_Subject roomId={id_data} />
                 <div id="replys">
                     {
-                        data && data.map((replys)=> {
-                            return( 
-                                <div className='reply' className='container'>
-                                    <h5>{replys.writerName}</h5>
-                                    <p>{replys.content}</p>
-                                </div>
-                            )
+                        reply.map((replys)=> {
+                            return <SingleReply reply={replys}/>
                         })
                     }
                 </div>
@@ -109,16 +105,11 @@ const Debate_Room = () => {
                     <textarea id="new-reply-content"></textarea>
                     <button id="submit-new-reply" onClick={function(e){
                         addReply();
-                        window.location.reload();
                     }}>입력</button>
                 </div>
             </div>
         </div>
     )
-    
-
-    
-    
 }
 
 export default Debate_Room;
