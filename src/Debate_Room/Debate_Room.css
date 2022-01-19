@@ -20,10 +20,13 @@ textarea {
 }
 
 .container {
-  border: 5px solid;
+  border: 1px solid gray;
   margin: 5px;
   padding: 1em;
   border-color: black;
+  box-shadow: 3px 3px;
+  border-radius: 5px;
+  background-color: yellow;
 }
 
 button {
@@ -33,4 +36,23 @@ button {
   background-color: coral;
   padding: 5px;
   border-radius: 5px;
+}
+
+#titleBox {
+  border: 1px solid gray;
+  margin: 5px;
+  padding: 1em;
+  border-color: black;
+  box-shadow: 3px 3px;
+  border-radius: 5px;
+  background-color: aquamarine;
+}
+
+.writer {
+  font-weight: bold;
+}
+
+#Debate_Room {
+  width: 1320px;
+  height: 1250px;
 }

@@ -1,4 +1,4 @@
-function BrowerCheck(props) {
+function BrowserCheck(props) {
     var sBrowser, sUsrAg = navigator.userAgent;
 
     // The order matters here, and this may report false positives for unlisted browsers.
@@ -33,4 +33,4 @@ function BrowerCheck(props) {
     );
 }
 
-export default BrowerCheck;
+export default BrowserCheck;
