@@ -92,8 +92,10 @@ const Debate_Room = () => {
     return (
         <div id="Debate_Room">
             <div>
-                <Debate_title roomId={id_data} />
-                <Debate_Subject roomId={id_data} />
+                <div id="titleBox">
+                    <Debate_title roomId={id_data} />
+                    <Debate_Subject roomId={id_data} />
+                </div>
                 <div id="replys">
                     {
                         reply.map((replys)=> {
