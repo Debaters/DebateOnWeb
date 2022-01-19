@@ -15,7 +15,7 @@ const Home = ({ props }) => {
       "/graphql",
       {
         query: `query gethomeDebates {
-      homeDebates(offset:0, size:5){id title creatorName}
+      homeDebates(offset:0, size:7){id title creatorName}
     }`,
       },
       {
@@ -58,7 +58,6 @@ const Home = ({ props }) => {
     const scrollTop = mainScrollSection.scrollTop;
     const clientHeight = mainScrollSection.clientHeight;
     if (scrollTop + clientHeight >= scrollHeight) {
-      // console.log("밑 바닥에 파닭", offset);
       setOffset(offset + 1);
       fetchMoreData(offset);
     }
@@ -121,7 +120,7 @@ const Frame = styled.div`
 `;
 
 const Card = styled.div`
-  height: 100px;
+  height: 120px;
   min-width: 300px;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
