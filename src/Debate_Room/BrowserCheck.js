@@ -1,3 +1,4 @@
+// 닉네임 대용으로 사용중이던 브라우저 명 체크. 닉네임이 정상 작동할 경우 해당 소스는 제거 예정
 function BrowserCheck(props) {
     var sBrowser, sUsrAg = navigator.userAgent;
 

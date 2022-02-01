@@ -9,6 +9,7 @@ import { getDefaultNormalizer } from '@testing-library/dom';
 
 const Debate_Room = () => {
     const [reply, setReply] = useState([]);
+    const [NickName, setNick] = useState("");
     const location = useLocation();
     const id_data = location.state.debaterId;
 
@@ -18,7 +19,8 @@ const Debate_Room = () => {
     }
 
     useEffect(() => {
-        loadComment(id_data).then().catch();
+        loadComment(id_data);
+        getNickName();
     }, []);
 
     const loadComment = async(id) => {
@@ -26,7 +28,7 @@ const Debate_Room = () => {
                     {
                         query: ` 
                             query ($id:String!){
-                                getComments(debateId:$id, offset:0, size:5){
+                                getComments(debateId:$id, offset:0, size:20){
                                     content
                                     writerName
                                     debateId
@@ -81,13 +83,34 @@ const Debate_Room = () => {
         )
     }
 
+   const getNickName = async() => {
+        const { data: response } = await axios.post("/graphql",
+            {
+                query: 
+                    `
+                    query{
+                        getNickname
+                    }
+                    `,
+            },
+            {
+                headers: {
+                "Accept": "application/json",
+                "Api-Key": "demoKeyOfApi",
+                "Content-Type": "application/json"
+                }
+            }
+        )
+        setNick(response.data);
+   }
+
    const addReply = () => {
         let value = document.querySelector('#new-reply-content').value;
         setReply([...reply, {
-            writerName : <BrowserCheck />,
+            writerName : NickName.getNickname,
             content : value
         }]);
-        addComment(id_data, value, BrowserCheck());
+        addComment(id_data, value, NickName.getNickname);
         remove_text();
     }
 
