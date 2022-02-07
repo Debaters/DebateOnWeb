@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
-
+import customAxios from "./customAxios";
+import gql from "./gql";
 import ModalCreateRoom from "./Home/ModalCreateRoom";
 
 const Home = ({ props }) => {
@@ -10,44 +10,19 @@ const Home = ({ props }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [offset, setOffset] = useState(1);
   let history = useHistory();
+
   const getData = async () => {
-    const { data: response } = await axios.post(
-      "/graphql",
-      {
-        query: `query gethomeDebates {
-      homeDebates(offset:0, size:7){id title creatorName}
-    }`,
-      },
-      {
-        headers: {
-          Accept: "application/json",
-          "Api-Key": "demoKeyOfApi",
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const { data: response } = await customAxios.post("/graphql", {
+      query: gql.getHomeDebates(),
+    });
     setData(response.data.homeDebates);
   };
 
-  const fetchMoreData = async (offset) => {
-    await axios
-      .post(
-        "/graphql",
-        {
-          query: `query gethomeDebates {
-  homeDebates(offset:${offset}, size:5){id title creatorName}
-  }`,
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            "Api-Key": "demoKeyOfApi",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((reponse) => {
-        const newData = reponse.data.data.homeDebates;
+  const getMoreData = async (offset) => {
+    await customAxios
+      .post("/graphql", { query: gql.getHomeDebates(offset) })
+      .then((response) => {
+        const newData = response.data.data.homeDebates;
         const mergeData = data.concat(newData);
         setData(mergeData);
       });
@@ -59,7 +34,7 @@ const Home = ({ props }) => {
     const clientHeight = mainScrollSection.clientHeight;
     if (scrollTop + clientHeight >= scrollHeight) {
       setOffset(offset + 1);
-      fetchMoreData(offset);
+      getMoreData(offset);
     }
   }
 
