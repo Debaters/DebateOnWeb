@@ -1,36 +1,56 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
-
+import customAxios from "./customAxios";
+import gql from "./gql";
 import ModalCreateRoom from "./Home/ModalCreateRoom";
 
 const Home = ({ props }) => {
-  const [data, setData] = useState("");
+  const [data, setData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [offset, setOffset] = useState(1);
   let history = useHistory();
 
   const getData = async () => {
-    const { data: response } = await axios.post(
-      "/graphql",
-      {
-        query: `query gethomeDebates {
-      homeDebates(offset:1, size:5){id title creatorName}
-    }`,
-      },
-      {
-        headers: {
-          Accept: "application/json",
-          "Api-Key": "demoKeyOfApi",
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const { data: response } = await customAxios.post("/graphql", {
+      query: gql.getHomeDebates(),
+    });
     setData(response.data.homeDebates);
   };
+
+  const getMoreData = async (offset) => {
+    await customAxios
+      .post("/graphql", { query: gql.getHomeDebates(offset) })
+      .then((response) => {
+        const newData = response.data.data.homeDebates;
+        const mergeData = data.concat(newData);
+        setData(mergeData);
+      });
+  };
+
+  function checkScroll() {
+    const scrollHeight = mainScrollSection.scrollHeight;
+    const scrollTop = mainScrollSection.scrollTop;
+    const clientHeight = mainScrollSection.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight) {
+      setOffset(offset + 1);
+      getMoreData(offset);
+    }
+  }
+
+  const mainScrollSection = document.querySelector(".main");
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    mainScrollSection &&
+      mainScrollSection.addEventListener("scroll", checkScroll);
+
+    return () => {
+      mainScrollSection &&
+        mainScrollSection.removeEventListener("scroll", checkScroll);
+    };
+  });
 
   const onClickList = (id) => {
     history.push({ pathname: "/routing", state: { debaterId: id } });
@@ -75,7 +95,7 @@ const Frame = styled.div`
 `;
 
 const Card = styled.div`
-  height: 100px;
+  height: 120px;
   min-width: 300px;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
