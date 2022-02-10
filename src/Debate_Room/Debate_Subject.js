@@ -30,7 +30,6 @@ const Debate_Subject = ( props )=>{
                         }
             );
             setData(data.debate);
-            console.log(data.debate);
         }
 
         getData(props.roomId);

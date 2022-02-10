@@ -9,6 +9,7 @@ import { getDefaultNormalizer } from '@testing-library/dom';
 
 const Debate_Room = () => {
     const [reply, setReply] = useState([]);
+    const [NickName, setNick] = useState("");
     const location = useLocation();
     const id_data = location.state.debaterId;
 
@@ -18,7 +19,8 @@ const Debate_Room = () => {
     }
 
     useEffect(() => {
-        loadComment(id_data).then().catch();
+        loadComment(id_data);
+        getNickName();
     }, []);
 
     const loadComment = async(id) => {
@@ -26,11 +28,10 @@ const Debate_Room = () => {
                     {
                         query: ` 
                             query ($id:String!){
-                                debate(id:$id){
-                                    comments{
-                                        content
-                                        writerName
-                                    }
+                                getComments(debateId:$id, offset:0, size:20){
+                                    content
+                                    writerName
+                                    debateId
                             }
                         }`,
                         variables: { 
@@ -45,7 +46,9 @@ const Debate_Room = () => {
                         }
                     }
         );
-    setReply(response.data.debate.comments);
+        if(response.data.getComments.content != null || response.data.getComments.content != "undefined" || response.data.getComments.content != ""){
+            setReply(response.data.getComments);
+        }
     }
 
     const addComment = async(id, content, writerName) => {
@@ -56,6 +59,7 @@ const Debate_Room = () => {
                                 addComment(
                                     debateId:$debateId,
                                     comment:{
+                                        debateId:$debateId,
                                         content:$content,
                                         writerName:$writerName
                                     }
@@ -79,13 +83,34 @@ const Debate_Room = () => {
         )
     }
 
+   const getNickName = async() => {
+        const { data: response } = await axios.post("/graphql",
+            {
+                query: 
+                    `
+                    query{
+                        getNickname
+                    }
+                    `,
+            },
+            {
+                headers: {
+                "Accept": "application/json",
+                "Api-Key": "demoKeyOfApi",
+                "Content-Type": "application/json"
+                }
+            }
+        )
+        setNick(response.data);
+   }
+
    const addReply = () => {
         let value = document.querySelector('#new-reply-content').value;
         setReply([...reply, {
-            writerName : <BrowserCheck />,
+            writerName : NickName.getNickname,
             content : value
         }]);
-        addComment(id_data, value, BrowserCheck());
+        addComment(id_data, value, NickName.getNickname);
         remove_text();
     }
 
@@ -98,10 +123,12 @@ const Debate_Room = () => {
                 </div>
                 <div id="replys">
                     {
-                        reply.map((replys)=> {
+                        reply.length > 0?
+                        reply.map((replys)=> { 
                             return <SingleReply reply={replys}/>
                         })
-                    }
+                        :<h1 id="noneReply">등록된 글이 없습니다.</h1>
+                    }    
                 </div>
                 <div id="writing-area">
                     <textarea id="new-reply-content"></textarea>
