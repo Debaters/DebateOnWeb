@@ -113,6 +113,12 @@ const Debate_Room = () => {
         addComment(id_data, value, NickName.getNickname);
         remove_text();
     }
+    
+    document.oncontextmenu=function(){return false;};
+    document.ondragstart=function(){return false;};
+    document.onselectstart=function(){return false;};
+    // 키입력 방지까지 사용한다면
+    // document.onkeydown=function(){return false;};
 
     return (
         <div id="Debate_Room">
