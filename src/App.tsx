@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Home from "./Home";
+import Home from "./components/Home/Home";
 import "./App.css";
 import "./Debate_Room/Debate_Room";
 import Debate_Room from "./Debate_Room/Debate_Room_func";
@@ -10,9 +10,7 @@ function App() {
     <Router>
       <header className='header'>
         <div>
-          <Link exact='true' to='/DebateOnWeb'>
-            Debaters world
-          </Link>
+          <Link to='/DebateOnWeb'>Debaters world</Link>
         </div>
       </header>
       <div className='main'>

@@ -1,4 +1,4 @@
-const getHomeDebates = (offset, size) => {
+const getHomeDebates = (offset: number, size: number): string => {
   let minBox = 7;
   if (offset === undefined) offset = 0;
   if (size === undefined || size < 6) size = minBox;
@@ -7,6 +7,6 @@ const getHomeDebates = (offset, size) => {
   }`;
 };
 
-const gql = { getHomeDebates };
+const homeQuery = { getHomeDebates };
 
-export default gql;
+export default homeQuery;
