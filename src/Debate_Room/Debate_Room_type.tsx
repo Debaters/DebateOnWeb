@@ -5,7 +5,6 @@ import Debate_title from './Debate_title';
 import axios from "axios";
 import { useLocation  } from "react-router-dom";
 import { gql, useQuery } from '@apollo/client';
-import { stringify } from 'querystring';
 
 
 interface IdData{
@@ -18,7 +17,7 @@ interface Comment{
 }
 
 interface NickNameVar{
-    nickName : string;
+    getNickname : string;
 }
 
 interface CommentVars{
@@ -51,7 +50,7 @@ const LOAD_COMMENT = gql`
 
 const Debate_Room = () => {
     const [reply, setReply] = useState<Comment[]>([]);
-    const [NickName, setNick] = useState<NickNameVar>({nickName : ""});
+    const [NickName, setNick] = useState<NickNameVar>({getNickname : ""});
     const location = useLocation<IdData>();
     const id_data = location.state.debaterId;
 
@@ -149,10 +148,10 @@ const Debate_Room = () => {
    const addReply = () => {
         let value = (document.querySelector('#new-reply-content') as HTMLInputElement).value;
         setReply([...reply, {
-            writerName : NickName.nickName,
+            writerName : NickName.getNickname,
             content : value
         }]);
-        addComment(id_data, value, NickName.nickName);
+        addComment(id_data, value, NickName.getNickname);
         remove_text();
     }
 
