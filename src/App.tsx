@@ -1,24 +1,26 @@
 import * as React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Home from "./components/Home/Home";
+
 import "./App.css";
-import "./Debate_Room/Debate_Room";
 import Debate_Room from "./Debate_Room/Debate_Room_func";
+import HomeTest from "./components/Home/HomeTest";
+import Home from "./components/Home/Home";
 
 function App() {
   return (
     <Router>
       <header className='header'>
         <div>
-          <Link to='/DebateOnWeb'>Debaters world</Link>
+          <Link to='/'>Debaters world</Link>
         </div>
       </header>
       <div className='main'>
         <Switch>
-          <Route exact path='/DebateOnWeb'>
-            <Home />
+          <Route exact path='/'>
+            {/* <Home /> */}
+            <HomeTest />
           </Route>
-          <Route exact path='/routing'>
+          <Route exact path='/room'>
             <Debate_Room />
           </Route>
         </Switch>
